@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-IMAGE_PATH = "image.png"
+IMAGE_PATH = "https://github.com/Kilua399/Game/blob/main/image.jpeg?raw=true"
 
 @app.route("/")
 def home():
@@ -38,3 +38,4 @@ def pixels():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
