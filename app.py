@@ -5,26 +5,7 @@ from io import BytesIO
 
 app = Flask(__name__)
 
-# 🔗 IMAGE URL (PUT YOUR IMAGE LINK HERE)
-IMAGE_URL = "https://github.com/Kilua399/Game/blob/main/UsingNow.jpeg?raw=true"
-
-def get_pixels():
-    response = requests.get(IMAGE_URL)
-    img = Image.open(BytesIO(response.content)).convert("RGB")
-
-    width, height = img.size
-    pixels = img.load()
-
-    pixel_table = {}
-    index = 1
-
-    for y in range(height):
-        for x in range(width):
-            r, g, b = pixels[x, y]
-            pixel_table[f"Pixel_{index}"] = [r, g, b]
-            index += 1
-
-    return pixel_table
+IMAGE_URL = "PUT_YOUR_IMAGE_URL_HERE"
 
 @app.route("/")
 def home():
@@ -32,7 +13,29 @@ def home():
 
 @app.route("/pixels")
 def pixels():
-    return jsonify(get_pixels())
+    try:
+        r = requests.get(IMAGE_URL, timeout=10)
+        r.raise_for_status()
+
+        img = Image.open(BytesIO(r.content)).convert("RGB")
+
+        width, height = img.size
+        pixels = img.load()
+
+        data = {}
+        index = 1
+
+        for y in range(height):
+            for x in range(width):
+                data[f"Pixel_{index}"] = list(pixels[x, y])
+                index += 1
+
+        return jsonify(data)
+
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
