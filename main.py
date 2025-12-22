@@ -20,7 +20,7 @@ def pixels():
     img = Image.open(BytesIO(response.content)).convert("RGB")
 
     # Optional: resize to reduce JSON size
-    img = img.resize((64, 64))
+    #img = img.resize((64, 64))
 
     width, height = img.size
     pixels = img.load()
@@ -43,3 +43,4 @@ def pixels():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
